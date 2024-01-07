@@ -174,16 +174,16 @@ class HelloGeoRenderer(val activity: HelloGeoActivity) :
     render.clear(virtualSceneFramebuffer, 0f, 0f, 0f, 0f)
     //</editor-fold>
 
-    // TODO: Obtain Geospatial information and display it on the map.
     val earth = session.earth
     if (earth?.trackingState == TrackingState.TRACKING) {
-      // TODO: the Earth object may be used here.
       val cameraGeospatialPose = earth.cameraGeospatialPose
       activity.view.mapView?.updateMapPosition(
         latitude = cameraGeospatialPose.latitude,
         longitude = cameraGeospatialPose.longitude,
         heading = cameraGeospatialPose.heading
       )
+
+      activity.view.updateStatusText(earth, cameraGeospatialPose)
     }
 
     // Draw the placed anchor, if it exists.
@@ -219,22 +219,14 @@ class HelloGeoRenderer(val activity: HelloGeoActivity) :
     val qw = 1f
 
     synchronized(earthAnchorsLock) {
-      if (results[0] < 8.0) {
-        val anchor = earth.createAnchor(latLng.latitude, latLng.longitude, altitude, qx, qy, qz, qw)
-        earthAnchors.add(anchor)
-
-        activity.view.mapView?.createEarthMarker(latLng.latitude, latLng.longitude)
-
+      if (results[0] > 8.0) {
         return
       }
 
       val anchor = earth.createAnchor(latLng.latitude, latLng.longitude, altitude, qx, qy, qz, qw)
       earthAnchors.add(anchor)
 
-      activity.view.mapView?.createEarthMarker(
-        earth.cameraGeospatialPose.latitude,
-        earth.cameraGeospatialPose.longitude
-      )
+      activity.view.mapView?.createEarthMarker(latLng.latitude, latLng.longitude)
     }
   }
 

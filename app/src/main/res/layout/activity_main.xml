@@ -39,7 +39,7 @@
         tools:context=".HelloGeoActivity" />
     <TextView
         android:padding="8dp"
-        android:textColor="@android:color/black"
+        android:textColor="#AAFF0000"
         android:background="#AAFFFFFF"
         android:layout_width="wrap_content"
         android:fontFamily="monospace"
